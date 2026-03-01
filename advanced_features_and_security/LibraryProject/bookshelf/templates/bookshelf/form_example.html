@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Secure Form Example</title>
+</head>
+<body>
+    <h1>Add a New Entry</h1>
+
+    <form method="post" action="{% url 'book_list' %}">
+        {% csrf_token %} {{ form.as_p }} <button type="submit">Submit Securely</button>
+    </form>
+
+    <p><a href="{% url 'book_list' %}">Return to Bookshelf</a></p>
+</body>
+</html>

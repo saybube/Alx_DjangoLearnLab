@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-7r^d1(n(kj)hg##icjs8wgym6u%i#39t1rxe7b$6201g+&!#zl'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG is False to prevent sensitive error details from being exposed to users.
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -118,3 +120,24 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+
+
+# Enables the browser's XSS filtering protections.
+SECURE_BROWSER_XSS_FILTER = True
+# Protects against Clickjacking by forbidding the site from being rendered in a frame.
+X_FRAME_OPTIONS = 'DENY'
+# Strict Browser Protection
+# Prevents the browser from sniffing the content type away from the declared one.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+# Cookie Security
+# Ensures cookies are only sent over HTTPS to prevent session hijacking.
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Content Security Policy
+# Limits where scripts, styles, and images can be loaded from to mitigate XSS.
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_SCRIPT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'",)
+CSP_IMG_SRC = ("'self'",)
