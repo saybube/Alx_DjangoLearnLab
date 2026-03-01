@@ -20,7 +20,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7r^d1(n(kj)hg##icjs8wgym6u%i#39t1rxe7b$6201g+&!#zl'
+# Updated to a long, random value to protect session cookies and reset tokens.
+SECRET_KEY = '6iwb%ftzd!h%15r77wk@ff=adzu0tk6c^7q=bv)+#h-1-p^=r8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG is False to prevent sensitive error details from being exposed to users.
@@ -122,7 +123,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 
-
 # Enables the browser's XSS filtering protections.
 SECURE_BROWSER_XSS_FILTER = True
 # Protects against Clickjacking by forbidding the site from being rendered in a frame.
@@ -134,6 +134,8 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 # Ensures cookies are only sent over HTTPS to prevent session hijacking.
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = True
 
 # Content Security Policy
 # Limits where scripts, styles, and images can be loaded from to mitigate XSS.
@@ -141,3 +143,19 @@ CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'",)
 CSP_IMG_SRC = ("'self'",)
+
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+# Tells the browser to remember to only use HTTPS for this site for 1 year (in seconds)
+SECURE_HSTS_SECONDS = 31536000 
+
+# Apply HSTS to all subdomains
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+# Allow the site to be submitted to the browser HSTS preload list
+SECURE_HSTS_PRELOAD = True
+
+# Proxy Header: Informs Django it is behind a secure reverse proxy (Nginx/Apache).
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
