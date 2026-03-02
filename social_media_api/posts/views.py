@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, filters, generics
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from accounts.models import CustomUser
 
 # Create your views here.
 class IsAuthorOrReadOnly(permissions.BasePermission):
@@ -54,3 +55,4 @@ class PostFeedView(generics.ListAPIView):
         # 2. Filter posts where the author is in that 'following_users' list
         # 3. Order by '-created_at' to show the most recent posts first
         return Post.objects.filter(author__in=following_users).order_by('-created_at')
+    
