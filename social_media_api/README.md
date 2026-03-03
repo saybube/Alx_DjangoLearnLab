@@ -1,69 +1,115 @@
-# Social Media API Documentation
+# Social Media API
 
-This project provides a backend REST API for a social media platform, built using Django and the Django REST Framework (DRF). The system handles user authentication, profile management, and social relationship tracking.
-
----
-
-## Technical Overview: User Model
-The application implements a **Custom User Model** by extending Django's `AbstractUser`. This approach provides the flexibility required for social media features while maintaining compatibility with Django’s built-in authentication system.
-
-### Custom Fields
-| Field | Type | Description |
-| :--- | :--- | :--- |
-| `bio` | TextField | Stores user biographical information (optional). |
-| `profile_picture` | ImageField | Stores user avatar images in the `profile_pics/` directory. |
-| `followers` | ManyToManyField | A self-referential relationship used to track user connections (symmetrical=False). |
-
-
+A robust RESTful API built with Django and Django REST Framework that simulates core social media functionalities, including user authentication, content management, a dynamic follow system, and real-time-style notifications.
 
 ---
 
-## Installation and Environment Setup
+## Features
 
-### 1. Repository Configuration
-Navigate to the project directory and initialize the environment:
+- **User Management** – Custom user models, registration, and token-based authentication.
+- **Profiles** – Personalized bios and profile pictures.
+- **Posts & Comments** – Full CRUD functionality with author tracking.
+- **Follow System** – Follow/unfollow users to curate a personal feed.
+- **Feed** – A dedicated endpoint to view posts only from users you follow.
+- **Likes** – Like or unlike posts.
+- **Notifications** – Get notified when someone follows you or likes your posts via a `GenericForeignKey` system.
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Framework | Django 4.2+ |
+| API | Django REST Framework |
+| Database | SQLite (Development) / PostgreSQL (Production) |
+| Authentication | Token Authentication |
+
+---
+
+## API Endpoints
+
+### Accounts & Authentication
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/accounts/register/` | `POST` | Create a new account and receive a token. |
+| `/api/accounts/login/` | `POST` | Exchange credentials for an auth token. |
+| `/api/accounts/profile/` | `GET` / `PUT` | View or update your profile details. |
+| `/api/accounts/follow/<int:user_id>/` | `POST` | Follow a specific user. |
+| `/api/accounts/unfollow/<int:user_id>/` | `POST` | Unfollow a specific user. |
+
+### Posts & Social Interaction
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/posts/` | `GET` / `POST` | List all posts or create a new one. |
+| `/api/posts/<int:pk>/` | `GET` / `PUT` / `DELETE` | View, edit, or delete a specific post. |
+| `/api/posts/feed/` | `GET` | Retrieve posts from followed users, newest first. |
+| `/api/posts/<int:pk>/like/` | `POST` | Like a specific post. |
+| `/api/posts/<int:pk>/unlike/` | `POST` | Remove a like from a post. |
+
+### Notifications
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/api/notifications/` | `GET` | List all notifications for the authenticated user. |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.10+
+- pip
+
+### Installation
+
+1. **Clone the repository**
 ```bash
-python -m venv venv
-source venv/Scripts/activate 
+   git clone https://github.com/yourusername/social_media_api.git
+   cd social_media_api
+```
 
-API Architecture and Authentication
-The API utilizes Token-based Authentication. Authenticated requests must include the header:
-Authorization: Token <your_token_key>
+2. **Set up a virtual environment**
+```bash
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+```
 
-Endpoints Guide
-1. Accounts & Authentication
-2. Posts (CRUD)
-Base URL: /api/posts/
+3. **Install dependencies**
+```bash
+   pip install -r requirements.txt
+```
 
-List Posts (with Pagination & Search):
-GET /api/posts/?search=keyword&ordering=-created_at
-Response: Returns a paginated list of posts.
+4. **Apply migrations**
+```bash
+   python manage.py makemigrations
+   python manage.py migrate
+```
 
-Create Post:
-POST /api/posts/
-Payload: {"title": "My Title", "content": "My Content"}
-Note: Author is automatically assigned to the logged-in user.
+5. **Run the server**
+```bash
+   python manage.py runserver
+```
 
-3. Comments (CRUD)
-Base URL: /api/comments/
+---
 
-Create Comment:
-POST /api/comments/
-Payload: {"post": 1, "content": "This is a comment"}
+## Testing the Logic Flow
 
-Edit/Delete:
-PATCH /api/comments/<id>/ | DELETE /api/comments/<id>/
-Permission: Only the original author can edit or delete.
+1. Register two users — **User A** and **User B**.
+2. Post something as **User B**.
+3. Follow **User B** using **User A's** token.
+4. Check the feed as **User A** — User B's post should now appear.
+5. Like **User B's** post as **User A**.
+6. Check notifications as **User B** — a "liked your post" notification should appear.
 
-Examples
-Create Post Request (POST)
-URL: http://127.0.0.1:8000/api/posts/
-Header: Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b
+---
 
-Success Response (201 Created)
-Development Standards
-Framework: Django 5.x
-
-Filtering: Django-filter with SearchFilter and OrderingFilter
-
-Pagination: PageNumberPagination (10 items per page)
+## Project Structure
+```
+accounts/       # CustomUser model, follow/unfollow logic, and authentication
+posts/          # Post and Like models, feed logic, and content management
+notifications/  # Generic notification system using ContentTypes
+```
