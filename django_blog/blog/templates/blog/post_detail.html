@@ -16,4 +16,34 @@
     <h2 class="article-title">{{ object.title }}</h2>
     <p class="article-content">{{ object.content }}</p>
   </article>
+
+  <hr>
+
+<div class="comments-section">
+    <h3>Comments ({{ post.comments.count }})</h3>
+    
+    {% for comment in post.comments.all %}
+        <div class="comment mb-3 p-3 border rounded bg-light">
+            <p><strong>{{ comment.author }}</strong> <small class="text-muted">on {{ comment.created_at|date:"F d, Y H:i" }}</small></p>
+            <p>{{ comment.content }}</p>
+
+            {% if comment.author == user %}
+                <div class="mt-2">
+                    <a class="btn btn-sm btn-outline-info" href="{% url 'comment-update' comment.pk %}">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" href="{% url 'comment-delete' comment.pk %}">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="text-muted">No comments yet. Be the first to share your thoughts!</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+        <div class="mt-4">
+            <a href="{% url 'add-comment' post.pk %}" class="btn btn-primary">Add a Comment</a>
+        </div>
+    {% else %}
+        <p class="mt-4"><a href="{% url 'login' %}">Log in</a> to leave a comment.</p>
+    {% endif %}
+</div>
 {% endblock %}

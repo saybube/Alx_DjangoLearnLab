@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Delete Comment</legend>
+            <p>Are you sure you want to delete this comment?</p>
+            <blockquote class="blockquote p-3 bg-light">
+                {{ object.content|truncatewords:20 }}
+            </blockquote>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-danger" type="submit">Confirm Delete</button>
+            <a class="btn btn-outline-secondary" href="{{ object.post.get_absolute_url }}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
