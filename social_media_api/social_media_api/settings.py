@@ -31,7 +31,7 @@ DEBUG = False
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
-
+PORT = os.getenv('PORT', '8000')
 
 # Application definition
 
