@@ -23,10 +23,7 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'tags']
         widgets = {
-            'tags': TagWidget(attrs={
-                'class': 'form-control', 
-                'placeholder': 'Enter tags separated by commas (e.g. django, python)'
-            }),
+            'tags': TagWidget(), 
         }
 
 class CommentForm(forms.ModelForm):
