@@ -23,7 +23,6 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = ['title', 'content', 'tags']
         widgets = {
-            # This widget enables the comma-separated tagging style
             'tags': TagWidget(attrs={
                 'class': 'form-control', 
                 'placeholder': 'Enter tags separated by commas (e.g. django, python)'
