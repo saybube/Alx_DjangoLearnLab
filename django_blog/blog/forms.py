@@ -2,6 +2,7 @@ from django import forms
 from .models import Post, Comment
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from taggit.forms import TagWidget
 
 class CustomUserCreationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -20,12 +21,13 @@ class UserUpdateForm(forms.ModelForm):
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
-        # only include title and content. 
-        # The 'author' and 'published_date' are handled automatically by the view.
         fields = ['title', 'content', 'tags']
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 10, 'placeholder': 'Write your blog post here...'}),
-            'tags': forms.CheckboxSelectMultiple(),
+            # This widget enables the comma-separated tagging style
+            'tags': TagWidget(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Enter tags separated by commas (e.g. django, python)'
+            }),
         }
 
 class CommentForm(forms.ModelForm):
