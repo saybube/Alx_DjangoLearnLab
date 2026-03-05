@@ -18,6 +18,10 @@
                 <li><a href="{% url 'register' %}">Register</a></li>
                 <li><a href="{% url 'post-create' %}">New Post</a></li>
             </ul>
+            <form action="{% url 'search' %}" method="get" class="form-inline">
+                <input name="q" type="text" placeholder="Search posts or tags..." class="form-control mr-sm-2">
+                <button type="submit" class="btn btn-outline-success">Search</button>
+            </form>
         </nav>
     </header>
 

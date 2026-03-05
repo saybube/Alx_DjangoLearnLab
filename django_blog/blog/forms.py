@@ -22,9 +22,10 @@ class PostForm(forms.ModelForm):
         model = Post
         # only include title and content. 
         # The 'author' and 'published_date' are handled automatically by the view.
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
         widgets = {
             'content': forms.Textarea(attrs={'rows': 10, 'placeholder': 'Write your blog post here...'}),
+            'tags': forms.CheckboxSelectMultiple(),
         }
 
 class CommentForm(forms.ModelForm):
